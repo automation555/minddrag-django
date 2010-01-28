@@ -1,0 +1,9 @@
+# requirements for continuous integration environment
+# (install with "python bootstrap.py --ci")
+# note: this will also be installed in a development environment!
+
+nose==0.11.1
+django-nose==0.0.3
+-e git://github.com/cmheisel/nose-xcover.git#egg=nose-xcover
+coverage==3.2
+unittest-xml-reporting==1.0.3

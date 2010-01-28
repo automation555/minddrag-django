@@ -1,0 +1,9 @@
+syntax: glob
+*.pyc
+*.pyo
+*~
+.project
+.pydevproject
+secret.txt
+local_settings.py
+
