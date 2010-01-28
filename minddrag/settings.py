@@ -89,6 +89,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.humanize',
+    'minddrag.core',
 )
 
 MIDDLEWARE_CLASSES = (
