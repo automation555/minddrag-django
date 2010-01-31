@@ -1144,7 +1144,9 @@ def after_install(options, home_dir):
                          'install', '-q', '-r', 'ci-requirements.txt'])
 
     # install stuff only needed on production servers
-    if not (options.continuous_integration or options.development):
+    if not (options.continuous_integration
+            or options.development
+            or options.deploy):
         logger.notify('Setting up production server environment')
         subprocess.call([join(home_dir, 'bin', 'pip'),
                          'install', '-q', '-r', 'prod-requirements.txt'])
@@ -1157,6 +1159,9 @@ def extend_parser(parser):
     parser.add_option('--ci',
         action="store_true", dest="continuous_integration",
         help="Setup continuous integration environment")
+    parser.add_option('--deploy',
+        action="store_true", dest="deploy",
+        help="Prepare for deployment (only install stuff from requirements.txt)")
 
 
 ##file site.py

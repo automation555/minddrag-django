@@ -1,10 +1,19 @@
 #!/bin/bash
 
+export PIP_DOWNLOAD_CACHE=$HOME/pip_download_cache
+
+if [ -n "${WORKSPACE:-x}" ]; then
+    WORKSPACE="$PWD"
+fi
+
 cd $WORKSPACE
+
+python bootstrap.py --deploy minddrag-django-env
 
 . minddrag-django-env/bin/activate
 
-DEPLOY_STATUS = fab deploy > deploy_log.txt
+fab deploy > deploy_log.txt
+DEPLOY_STATUS = $?
 fab update_docs >> deploy_log.txt
-return $DEPLOY_STATUS
+exit $DEPLOY_STATUS
 
