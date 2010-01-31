@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # called from scripts directory?
 if [[ $PWD =~ "/scripts" ]]; then

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # the name of the app inside myproject to run pylint on is required
 # as command line argument

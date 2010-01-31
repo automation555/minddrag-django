@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 # called from scripts directory?
-if [[ $PWD =~ "/scripts" ]]; then
+if [[ "$PWD" =~ "/scripts" ]]; then
     cd ..
 fi
 
