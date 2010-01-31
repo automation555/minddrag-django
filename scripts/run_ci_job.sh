@@ -6,6 +6,10 @@ export PIP_DOWNLOAD_CACHE=$HOME/pip_download_cache
 # as command line argument
 [ $# -ge 1 ] || exit 1 
 
+if [ -n "${WORKSPACE:-x}" ]; then
+    WORKSPACE="$PWD"
+fi
+
 cd $WORKSPACE
 
 # install requirements

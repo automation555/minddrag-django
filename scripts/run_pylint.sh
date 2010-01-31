@@ -4,6 +4,10 @@
 # as command line argument
 [ $# -ge 1 ] || exit 1 
 
+if [ -n "${WORKSPACE:-x}" ]; then
+    WORKSPACE="$PWD"
+fi
+
 cd $WORKSPACE
 
 # make sure $1 contains a valid app name

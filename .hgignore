@@ -6,4 +6,4 @@ syntax: glob
 .pydevproject
 secret.txt
 local_settings.py
-
+minddrag-django-env
