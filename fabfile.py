@@ -24,6 +24,9 @@ def deploy():
         run('hg update')
         virtualenv('pip install -r requirements.txt')
         virtualenv('pip install -r prod-requirements.txt')
+        # ***FIXME*** use current host for local settings file name
+        # and infer file name from env.hosts variable
+        run('cp settings/romulus_settings.py minddrag/local_settings.py')
         run('touch minddrag/apache/django.wsgi')
 
 

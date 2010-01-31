@@ -8,3 +8,4 @@ secret.txt
 local_settings.py
 minddrag-django-env
 pip-log.txt
+dev.db
