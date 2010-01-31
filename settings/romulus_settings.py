@@ -1,5 +1,5 @@
-DEBUG = False
-TEMPLATE_DEBUG = False
+#DEBUG = False
+#TEMPLATE_DEBUG = False
 
 DATABASE_ENGINE = 'mysql'
 DATABASE_OPTIONS = {'init_command': 'SET storage_engine=INNODB'}
