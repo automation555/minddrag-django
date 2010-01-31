@@ -6,4 +6,4 @@ fi
 
 cd $WORKSPACE
 rm -rf *
-
+rm -rf .hg*
