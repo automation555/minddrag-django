@@ -1,4 +1,5 @@
 from __future__ import with_statement
+from os.path import join
 from fabric.api import *
 
 env.hosts = ['minddrag.zeropatience.net']
@@ -24,4 +25,9 @@ def deploy():
         virtualenv('pip install -r requirements.txt')
         virtualenv('pip install -r prod-requirements.txt')
         run('touch minddrag/apache/django.wsgi')
+
+
+def update_docs():
+    with cd(join(env.projectdir, 'docs')):
+        run('make html')
 
