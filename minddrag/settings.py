@@ -65,14 +65,14 @@ DATABASE_PORT = ''
 # ==============================================================================
 
 TIME_ZONE = 'Europe/Berlin'
-LANGUAGE_CODE = 'de'
+LANGUAGE_CODE = 'en'
 LANGUAGES = (('en', 'English'),
              ('de', 'German'))
 USE_I18N = True
 
 SITE_ID = 1
 
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'site_media')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/django_admin_media/'
 
@@ -88,6 +88,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.humanize',
     'django_extensions',
     'minddrag.core',

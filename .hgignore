@@ -4,6 +4,7 @@ syntax: glob
 *~
 .project
 .pydevproject
+.settings
 secret.txt
 local_settings.py
 minddrag-django-env

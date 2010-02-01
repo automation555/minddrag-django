@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    line-height: 1.5;
+}
+
+#header {
+    background-color:#4A4A4A;
+    height:30px;
+    margin-bottom:15px;
+    width:100%;
+}
+
+#header ul li a {
+    color:white;
+    float:left;
+    width:130px;
+    margin: 0 auto;
+    display:block;
+    height:25px;
+    padding-top:5px;
+    text-align:center;
+    text-decoration:none;
+}
+
+#header ul li a:hover {
+    -moz-background-clip:border;
+    -moz-background-inline-policy:continuous;
+    -moz-background-origin:padding;
+    background:#5A5A5A none repeat scroll 0 0;
+    color:#EEEEEE;
+    text-decoration:underline;
+}
+
+#header {
+    background-color:#4A4A4A;
+    height:30px;
+    margin-bottom:15px;
+    width:100%;
+}
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    border:0 none;
+    font-family:inherit;
+    font-size:100%;
+    font-style:inherit;
+    font-weight:inherit;
+    margin:0;
+    padding:0;
+    vertical-align:baseline;
+}
+
+.home #header ul {
+    width:950px;
+}
+
+#header ul {
+    display:block;
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:0 auto;
+    position:relative;
+    width:710px;
+}
+
+body {
+    color:#222222;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:75%;
+}
+
+
+tr.alt td {
+    background: #ecf6fc
+}
+
+tr.over td {
+    background: #bcd4ec
+}

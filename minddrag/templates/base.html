@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" />
+    <title>{% block title %}Minddrag{% endblock %}</title>
+</head>
+
+<body>
+    <div id="header">
+        {% block header %}
+            <ul>
+                <li><a href="***FIXME***">Download</a></li>
+                <li><a href="***FIXME***">Documentation</a></li>
+                <li><a href="***FIXME***">Support</a></li>
+                <li><a href="{% url login %}">Login</a></li>
+                <li><a href="***FIXME***">Register</a></li>
+                <!--<li id="searchbox"><input type="text"><button>Search</button></li>-->
+            </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}
+		{% endblock %}
+    </div>
+
+    <div id="footer">
+        {% block footer %}
+            Copyright &copy; {% now "Y" %} - MindDrag -
+            Empowered by <a href="http://www.minddrag.com">MindDrag.com</a> &trade;
+        {% endblock %}
+    </div>
+</body>
+</html>
