@@ -1,9 +1,12 @@
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js" />
+	{% block head %}{% endblock %}
     <title>{% block title %}Minddrag{% endblock %}</title>
 </head>
 
@@ -11,12 +14,12 @@
     <div id="header">
         {% block header %}
             <ul>
-                <li><a href="***FIXME***">Download</a></li>
-                <li><a href="***FIXME***">Documentation</a></li>
-                <li><a href="***FIXME***">Support</a></li>
-                <li><a href="{% url login %}">Login</a></li>
-                <li><a href="***FIXME***">Register</a></li>
-                <!--<li id="searchbox"><input type="text"><button>Search</button></li>-->
+                <li><a href="***FIXME***">{% trans "Download" %}</a></li>
+                <li><a href="***FIXME***">{% trans "Documentation" %}</a></li>
+                <li><a href="***FIXME***">{% trans "Support" %}</a></li>
+                <li><a href="{% url login %}">{% trans "Login" %}</a></li>
+                <li><a href="***FIXME***">{% trans "Register" %}</a></li>
+                <!--<li id="searchbox"><input type="text"><button>{% trans "Search" %}</button></li>-->
             </ul>
         {% endblock %}
     </div>
