@@ -11,7 +11,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 INTERNAL_IPS = ()
 if DEBUG:
-    TEMPLATE_STRING_IF_INVALID = 'Diese Variable ist invalide!!1!12!droelf!!fuffzehn!1!'
+    TEMPLATE_STRING_IF_INVALID = 'Diese Variable ist invalide!!1!'
 
 # ==============================================================================
 # cache settings
@@ -35,7 +35,7 @@ DEFAULT_FROM_EMAIL = 'minddrag@zeropatience.net'
 SERVER_EMAIL = 'error-notify@zeropatience.net'
 
 EMAIL_SUBJECT_PREFIX = '[%s] ' % PROJECT_NAME
-EMAIL_HOST = 'localhost'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'minddrag@interwebatron24.de'
 EMAIL_HOST_PASSWORD = 'ijvavDotnamoadcakHyk'
@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.humanize',
     'django_extensions',
+    'registration',
     'minddrag.core',
 )
 
@@ -138,13 +139,16 @@ except NameError:
             secret.write(SECRET_KEY)
             secret.close()
         except IOError:
-            Exception('Please create a %s file with random characters to generate your secret key!' % SECRET_FILE)
+            Exception('Please create a %s file with random characters to \
+generate your secret key!' % SECRET_FILE)
 
 # ==============================================================================
 # third party
 # ==============================================================================
 
-# ..third party app settings here
+# django-registration
+
+ACCOUNT_ACTIVATION_DAYS = 7
 
 # ==============================================================================
 # host specific settings
