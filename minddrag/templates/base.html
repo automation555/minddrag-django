@@ -4,25 +4,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" />
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js" />
+	<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
 	{% block head %}{% endblock %}
-    <title>{% block title %}Minddrag{% endblock %}</title>
+	<title>{% block title %}Minddrag{% endblock %}</title>
 </head>
 
-<body>
-    <div id="header">
-        {% block header %}
-            <ul>
-                <li><a href="***FIXME***">{% trans "Download" %}</a></li>
+<body {%block body_attribs %}{% endblock %}>
+	<div id="header">
+		{% block header %}
+           	<ul>
+              	<li><a href="***FIXME***">{% trans "Download" %}</a></li>
                 <li><a href="***FIXME***">{% trans "Documentation" %}</a></li>
                 <li><a href="***FIXME***">{% trans "Support" %}</a></li>
 				{% if user.is_authenticated %}
                 	<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
 				{% else %}
                 	<li><a href="{% url login %}">{% trans "Login" %}</a></li>
+                <li><a href="{% url registration_register %}">{% trans "Register" %}</a></li>					
 				{% endif %}
-                <li><a href="***FIXME***">{% trans "Register" %}</a></li>
                 <!--<li id="searchbox"><input type="text"><button>{% trans "Search" %}</button></li>-->
             </ul>
         {% endblock %}

@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% block body_attribs %}onload="document.forms.loginform.username.focus();"{% endblock %}
 {% block content %}
 
   {% if form.errors %}
     <p class="error">{% trans "Sorry, that's not a valid username or password" %}</p>
   {% endif %}
 
-  <form action="" method="post">
+  <form action="" method="post" id="loginform">
     <label for="username">{% trans "User name" %}:</label>
     <input type="text" name="username" value="" id="username">
     <label for="password">{% trans "Password" %}:</label>

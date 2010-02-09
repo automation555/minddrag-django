@@ -36,7 +36,7 @@ SERVER_EMAIL = 'error-notify@zeropatience.net'
 
 EMAIL_SUBJECT_PREFIX = '[%s] ' % PROJECT_NAME
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
+EMAIL_PORT = 587
 EMAIL_HOST_USER = 'minddrag@interwebatron24.de'
 EMAIL_HOST_PASSWORD = 'ijvavDotnamoadcakHyk'
 EMAIL_USE_TLS = True

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+{% trans "We've sent you an email. To complete your registration," %}
+{% trans "click on the link in the email." %}
+<a href="{% url index %}">{% trans "Home" %}</a> 
+{% endblock %}
