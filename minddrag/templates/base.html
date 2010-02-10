@@ -18,9 +18,9 @@
                 <li><a href="***FIXME***">{% trans "Documentation" %}</a></li>
                 <li><a href="***FIXME***">{% trans "Support" %}</a></li>
 				{% if user.is_authenticated %}
-                	<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
+                	<li><a href="{% url auth_logout %}">{% trans "Logout" %}</a></li>
 				{% else %}
-                	<li><a href="{% url login %}">{% trans "Login" %}</a></li>
+                	<li><a href="{% url auth_login %}">{% trans "Login" %}</a></li>
                 <li><a href="{% url registration_register %}">{% trans "Register" %}</a></li>					
 				{% endif %}
                 <!--<li id="searchbox"><input type="text"><button>{% trans "Search" %}</button></li>-->

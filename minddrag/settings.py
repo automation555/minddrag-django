@@ -45,8 +45,11 @@ EMAIL_USE_TLS = True
 # auth settings
 # ==============================================================================
 
-LOGIN_URL = '/accounts/login/'
-LOGOUT_URL = '/accounts/logout/'
+# put all login/registration/profile stuff under one url prefix
+ACCOUNTS_URL_PREFIX='/accounts/'
+
+LOGIN_URL = ACCOUNTS_URL_PREFIX + 'login/'
+LOGOUT_URL = ACCOUNTS_URL_PREFIX + 'logout/'
 LOGIN_REDIRECT_URL = '/'
 
 # ==============================================================================
