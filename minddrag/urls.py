@@ -68,6 +68,8 @@ urlpatterns = patterns('',
 #        { 'template': 'registration/registration_closed.html' },
 #        name='registration_disallowed'),
     
+    url(r'^members/$', 'core.views.my_dragables', name='core_my_dragables'),
+    
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
 )

@@ -9,4 +9,4 @@ Fabric==0.9.0
 #django-fab==1.0.4
 yolk==0.4.1
 Sphinx==0.6.4
-
+South==0.6.2

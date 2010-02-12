@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django_extensions',
     'registration',
+    #'south',
     'minddrag.core',
 )
 
