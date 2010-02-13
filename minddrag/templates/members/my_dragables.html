@@ -5,10 +5,10 @@
 <table>
 	{% for dragable in dragables %}
 	<tr>
-		<td>dragable.title</td>
-		<td>dragable.hash</td>
-		<td>dragable.url</td>
-		<td>dragable.xpath</td>
+		<td>{{ dragable.title }}</td>
+		<td>{{ dragable.hash }}</td>
+		<td>{{ dragable.url }}</td>
+		<td>{{ dragable.xpath }}</td>
 	</tr>
 	{% endfor %}
 </table>

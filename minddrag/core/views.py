@@ -18,7 +18,7 @@ def my_dragables(request):
     """
     The page where users can view their dragables.
     """
-    dragables = models.Dragable.objects.filter(creator=request.user)
+    dragables = models.Dragable.objects.filter(created_by=request.user)
     return render_to_response('members/my_dragables.html',
                               {'dragables': dragables},
                               context_instance=RequestContext(request))
