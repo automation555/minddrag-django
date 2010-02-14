@@ -14,6 +14,7 @@ class Team(models.Model):
     class Meta:
         verbose_name = _('team')
         verbose_name_plural = _('teams')
+        ordering = ['name', 'created']
         
     name = models.CharField(_('name'), max_length=64, unique=True)
     description = models.TextField(_('description'), blank=True)
@@ -47,6 +48,7 @@ class Dragable(models.Model):
     class Meta:
         verbose_name = _('dragable')
         verbose_name_plural = _('dragables')
+        ordering = ['created']
         
     hash = models.CharField(_('hash'), max_length=128, unique=True)
     created_by = models.ForeignKey(User, name=_('created by'))
@@ -74,6 +76,7 @@ class Annotation(models.Model):
     class Meta:
         verbose_name = _('annotation')
         verbose_name_plural = _('annotations')
+        ordering = ['created']
         abstract = True
     
     hash = models.CharField(_('hash'), max_length=128, unique=True)
