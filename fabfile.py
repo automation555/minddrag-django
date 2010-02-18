@@ -6,7 +6,7 @@ env.hosts = ['minddrag.zeropatience.net']
 env.user = 'minddrag'
 env.repourl = 'ssh://hg@bitbucket.org/haikoschol/minddrag-django'
 env.projectdir = '/home/minddrag/minddrag-django'
-env.activate = 'source ../minddrag-django-env/bin/activate'
+env.activate = 'source /home/minddrag/minddrag-django-env/bin/activate'
 
 def virtualenv(command):
     run(env.activate + ' && ' + command)
