@@ -11,8 +11,12 @@ venv_path = os.path.abspath(os.path.join(root_dir, '..', 'minddrag-django-env'))
 # with mod_wsgi >= 2.4, this line will add this path in front of the python path
 site.addsitedir(os.path.join(venv_path, 'lib/python2.6/site-packages'))
 
-# add this django project
+# add dir above this django project
 sys.path.append(root_dir)
+
+# add this django project
+# (so we don't need the project name in import statements)
+sys.path.append(os.path.join(root_dir, 'minddrag'))
  
 os.environ['DJANGO_SETTINGS_MODULE'] = 'minddrag.settings'
   
