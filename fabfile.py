@@ -16,6 +16,9 @@ def setup():
     run('hg clone ' + env.repourl)
     with cd(env.projectdir):
         run('scripts/setup_prod.sh')
+    with cd(join(env.projectdir, 'minddrag')):
+        virtualenv('python manage.py syncdb --noinput')
+        virtualenv('python manage.py createsuperuser --username hs --email hs@zeropatience.net --noinput')
 
 
 def deploy():
