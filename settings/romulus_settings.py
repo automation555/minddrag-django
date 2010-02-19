@@ -1,5 +1,5 @@
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 DATABASE_ENGINE = 'postgresql_psycopg2'
 DATABASE_NAME = 'minddrag'
