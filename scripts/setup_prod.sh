@@ -15,3 +15,6 @@ else
 fi
 
 python bootstrap.py $VENV
+
+# copy server specific settings file in place
+cp settings/romulus_settings.py minddrag/local_settings.py
