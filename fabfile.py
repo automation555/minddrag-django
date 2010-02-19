@@ -31,7 +31,7 @@ def setup():
         run('cp settings/$(hostname)_settings.py $(projectdir)/local_settings.py')
     
     with cd(env.projectdir):
-#        virtualenv('python manage.py syncdb --noinput')
+        virtualenv('python manage.py syncdb --noinput')
         virtualenv('python manage.py migrate')
         virtualenv('python manage.py createsuperuser --username $(superusername) --email $(superusermail) --noinput')
 
@@ -48,6 +48,9 @@ def deploy():
         virtualenv('pip install -r prod-requirements.txt')
         run('cp $(repodir)/settings/$(hostname)_settings.py $(projectdir)/local_settings.py')
         run('touch $(projectdir)/apache/django.wsgi')
+
+    with cd(env.projectdir):
+        virtualenv('python manage.py migrate')
 
 
 def update_docs():
