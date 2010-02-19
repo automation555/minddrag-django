@@ -54,9 +54,9 @@ def deploy():
     with cd(env.repodir):
         run('hg pull')
         run('hg update')
-        virtualenv('pip install -r requirements.txt')
-        virtualenv('pip install -r prod-requirements.txt')
-        run('cp %(repodir)/settings/%(hostname)s_settings.py %(projectdir)s/local_settings.py' % env)
+        virtualenv('pip install -q -r requirements.txt')
+        virtualenv('pip install -q -r prod-requirements.txt')
+        run('cp %(repodir)s/settings/%(hostname)s_settings.py %(projectdir)s/local_settings.py' % env)
         run('touch %(projectdir)s/apache/django.wsgi' % env)
 
     with cd(env.projectdir):
