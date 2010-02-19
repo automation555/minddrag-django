@@ -3,7 +3,9 @@ from os.path import join
 from fabric.api import *
 
 env.hosts = ['minddrag.zeropatience.net']
+env.user = 'minddrag'
 env.hostname = 'romulus'
+env.projectname = 'minddrag'
 env.repourl = 'ssh://hg@bitbucket.org/haikoschol/minddrag-django'
 env.repodir = '/home/minddrag/minddrag-django'
 env.venvdir = '/home/minddrag/minddrag-django-env'
@@ -11,6 +13,12 @@ env.projectdir = '/home/minddrag/minddrag-django/minddrag'
 env.activate = 'source /home/minddrag/minddrag-django-env/bin/activate'
 env.superusername = 'hs'
 env.superusermail = 'hs@zeropatience.net'
+
+
+def prepare_deploy():
+    with cd(env.projectname):
+        local('python manage.py test core')
+
 
 def virtualenv(command):
     require('activate')
@@ -25,15 +33,15 @@ def setup():
     require('superusername')
     require('superusermail')
 
-    run('hg clone $(repourl)')
+    run('hg clone %(repourl)s' % env)
     with cd(env.repodir):
-        run('python bootstrap.py $(venvdir)')
-        run('cp settings/$(hostname)_settings.py $(projectdir)/local_settings.py')
+        run('python bootstrap.py %(venvdir)s' % env)
+        run('cp settings/%(hostname)s_settings.py %(projectdir)s/local_settings.py' % env)
     
     with cd(env.projectdir):
         virtualenv('python manage.py syncdb --noinput')
         virtualenv('python manage.py migrate')
-        virtualenv('python manage.py createsuperuser --username $(superusername) --email $(superusermail) --noinput')
+        virtualenv('python manage.py createsuperuser --username %(superusername)s --email %(superusermail)s --noinput' % env)
 
 
 def deploy():
@@ -41,13 +49,15 @@ def deploy():
     require('hostname')
     require('projectdir')
 
+    prepare_deploy()
+    
     with cd(env.repodir):
         run('hg pull')
         run('hg update')
         virtualenv('pip install -r requirements.txt')
         virtualenv('pip install -r prod-requirements.txt')
-        run('cp $(repodir)/settings/$(hostname)_settings.py $(projectdir)/local_settings.py')
-        run('touch $(projectdir)/apache/django.wsgi')
+        run('cp %(repodir)/settings/%(hostname)s_settings.py %(projectdir)s/local_settings.py' % env)
+        run('touch %(projectdir)s/apache/django.wsgi' % env)
 
     with cd(env.projectdir):
         virtualenv('python manage.py migrate')
