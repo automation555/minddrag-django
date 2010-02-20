@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block body_attribs %}onload="document.forms[0][0].focus();"{% endblock %}
 {% block content %}
-<form action="{% url auth_register %}" method="POST">
+<form action="{% url registration_register %}" method="POST">
 	{{ form.as_p }}
 	<input type="submit" name="submit" value="{% trans 'Register' %}" />
 </form>
