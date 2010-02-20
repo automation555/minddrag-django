@@ -60,7 +60,7 @@ def deploy():
         run('touch %(projectdir)s/apache/django.wsgi' % env)
 
     with cd(env.projectdir):
-        virtualenv('python manage.py migrate')
+        virtualenv('python manage.py syncdb')
         virtualenv('python manage.py migrate')
 
 
