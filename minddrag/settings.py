@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'registration',
     'south',
     'minddrag.core',
+    'minddrag.api',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -11,6 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   concepts
+   RESTful HTTP API <api>
+
 Indices and tables
 ==================
 
