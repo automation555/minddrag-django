@@ -37,7 +37,7 @@ def setup():
     with cd(env.repodir):
         run('python bootstrap.py %(venvdir)s' % env)
         run('cp settings/%(hostname)s_settings.py %(projectdir)s/local_settings.py' % env)
-    
+
     with cd(env.projectdir):
         virtualenv('python manage.py syncdb --noinput')
         virtualenv('python manage.py migrate')
@@ -62,10 +62,12 @@ def deploy():
     with cd(env.projectdir):
         virtualenv('python manage.py syncdb')
         virtualenv('python manage.py migrate')
+    
+    update_docs()
 
 
 def update_docs():
-    require('projectdir')
-    with cd(join(env.projectdir, 'docs')):
+    require('repodir')
+    with cd(join(env.repodir, 'docs')):
         run('make html')
 
