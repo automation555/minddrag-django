@@ -61,6 +61,7 @@ def deploy():
 
     with cd(env.projectdir):
         virtualenv('python manage.py migrate')
+        virtualenv('python manage.py migrate')
 
 
 def update_docs():
