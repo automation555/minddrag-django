@@ -11,7 +11,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 INTERNAL_IPS = ()
 if DEBUG:
-    TEMPLATE_STRING_IF_INVALID = 'Diese Variable ist invalide!!1!'
+    TEMPLATE_STRING_IF_INVALID = ''
 
 # ==============================================================================
 # cache settings
@@ -154,6 +154,12 @@ generate your secret key!' % SECRET_FILE)
 # django-registration
 
 ACCOUNT_ACTIVATION_DAYS = 7
+
+# django-piston
+
+PISTON_EMAIL_ERRORS = False
+PISTON_DISPLAY_ERRORS = True
+PISTON_STREAM_OUTPUT = False
 
 # ==============================================================================
 # host specific settings

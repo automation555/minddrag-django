@@ -19,8 +19,8 @@ class Team(models.Model):
     name = models.CharField(_('name'), max_length=64, unique=True)
     description = models.TextField(_('description'), blank=True)
     created_by = models.ForeignKey(User,
-                                name=_('created by'),
-                                related_name='team_created_by')
+                                   name=_('created by'),
+                                   related_name='team_created_by')
     members = models.ManyToManyField(User,
                                      name=_('members'),
                                      related_name='team_members',
@@ -29,16 +29,19 @@ class Team(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     public = models.BooleanField(_('public'), default=True)
     password = models.CharField(_('password'), max_length=128, blank=True)
-    
-    def __unicode__(self):
-        return self.name
+
 
     def has_access(self, user):
         """
         Returns true, if the team is public, or the given user is the founder
         or a member of the team.
         """
-        return self.public or self.founder == user or self.members.contains(user)
+        return self.public or self.founder == user or self.members.contains(
+                                                                        user)
+
+         
+    def __unicode__(self):
+        return self.name
         
 
 class Dragable(models.Model):
@@ -147,7 +150,6 @@ class FileAnnotation(Annotation):
 
     filename = models.CharField(_('filename'), max_length=255)
     description = models.TextField(_('description'), blank=True)
-
 
 
 class ConnectionAnnotation(Annotation):

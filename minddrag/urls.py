@@ -69,6 +69,9 @@ urlpatterns = patterns('',
 #        name='registration_disallowed'),
     
     url(r'^members/$', 'core.views.my_dragables', name='core_my_dragables'),
+
+    # API
+    (r'^api/', include('api.urls')),
     
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
