@@ -88,7 +88,7 @@ class TeamHandler(BaseHandler):
 
 
 class DragableHandler(BaseHandler):
-    allowed_methods = ('GET', 'POST', 'PUT')
+    allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
     model = Dragable
     fields = ('hash',
               ('created_by', ('username',)),
@@ -184,3 +184,16 @@ class DragableHandler(BaseHandler):
                 setattr(dragable, field, request.PUT[field])
         dragable.save()
         return rc.ALL_OK
+
+
+    def delete(self, request, hash):
+        try:
+            dragable = Dragable.objects.get(hash=hash)
+        except:
+            return rc.BAD_REQUEST
+
+        if not dragable.can_modify(request.user):
+            return rc.FORBIDDEN
+
+        dragable.delete()
+        return rc.DELETED

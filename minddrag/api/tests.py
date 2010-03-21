@@ -702,3 +702,111 @@ class DragableTest(TestCase):
         self.assertEqual(dragable.url, url_after)
         self.assertEqual(dragable.xpath, xpath_after)
         self.assertEqual(dragable.title, title_after)
+
+
+    def test_update_dragable_connected_to(self):
+        username = self.client.username
+        dragables = Dragable.objects.filter(team__members__username=username)
+        self.assert_(len(dragables) > 1)
+        dragable = dragables[0]
+        connected_to = dragables[1]
+        self.assert_((not dragable.connected_to) or
+                     (dragable.connected_to.hash != connected_to.hash))
+        # make sure both dragables are part of the same team (FIXME is this a requirement?)
+        connected_to.team = dragable.team
+        connected_to.save()
+        hash = dragable.hash
+        data = {'connected_to': connected_to.hash}
+        response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
+        self.assertEqual(response.status_code, 200)
+        updated_dragable = Dragable.objects.get(hash=hash)
+        self.assertEqual(updated_dragable.connected_to.hash, connected_to.hash)
+
+
+    def test_update_inaccessible_dragable(self):
+        username = self.client.username
+        dragable = Dragable.objects.exclude(team__members__username=username)[0]
+        newtitle = 'can\'t touch this!'
+        self.assertNotEqual(dragable.title, newtitle)
+        hash = dragable.hash
+        data = {'title': newtitle}
+        response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
+        self.assertEqual(response.status_code, 401)
+        self.assertNotEqual(dragable.title, newtitle)
+
+
+    def test_update_dragable_inaccessible_team(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = dragable.hash
+
+        # find a team that we don't have access to
+        team = Team.objects.exclude(members__username=username)[0]
+
+        self.assertNotEqual(dragable.team.name, team.name)
+        data = {'team': team.name}
+        response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
+        self.assertEqual(response.status_code, 401)
+        dragable = Dragable.objects.get(hash=hash)
+        self.assertNotEqual(dragable.team.name, team.name)
+
+
+    def test_update_nonexistent_dragable(self):
+        nosuchhash = '783459343'
+        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        data = {'title': 'nevermind'}
+        response = self.client.put('/api/1.0/dragables/%s/' % nosuchhash, data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+
+
+    def test_update_dragable_nonexistent_team(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = dragable.hash
+        nosuchteam = 'this team does not exist'
+        self.assertEqual(len(Team.objects.filter(name=nosuchteam)), 0)
+        data = {'team': nosuchteam}
+        response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
+        self.assertEqual(response.status_code, 400)
+        dragable = Dragable.objects.get(hash=hash)
+        self.assertNotEqual(dragable.team.name, nosuchteam)
+
+
+    def test_update_dragable_nonexistent_connected_to(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        nosuchhash = '783459343'
+        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        hash = dragable.hash
+        data = {'connected_to': nosuchhash}
+        response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
+        self.assertEqual(response.status_code, 400)
+        dragable = Dragable.objects.get(hash=hash)
+        self.assert_((not dragable.connected_to) or
+                     (dragable.connected_to.hash != nosuchhash))
+
+
+    def test_delete_dragable(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = dragable.hash
+        response = self.client.delete('/api/1.0/dragables/%s/' % hash)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(len(Dragable.objects.filter(hash=hash)), 0)
+
+
+    def test_delete_inaccessible_dragable(self):
+        username = self.client.username
+        dragable = Dragable.objects.exclude(team__members__username=username)[0]
+        hash = dragable.hash
+        response = self.client.delete('/api/1.0/dragables/%s/' % hash)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(len(Dragable.objects.filter(hash=hash)), 1)
+
+
+    def test_delete_nonexistent_dragable(self):
+        nosuchhash = '783459343'
+        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        response = self.client.delete('/api/1.0/dragables/%s/' % nosuchhash)
+        self.assertEqual(response.status_code, 400)
