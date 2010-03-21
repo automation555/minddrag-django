@@ -15,7 +15,7 @@ class Team(models.Model):
         verbose_name = _('team')
         verbose_name_plural = _('teams')
         ordering = ['name', 'created']
-        
+
     name = models.CharField(_('name'), max_length=64, unique=True)
     description = models.TextField(_('description'), blank=True)
     created_by = models.ForeignKey(User,
@@ -31,18 +31,13 @@ class Team(models.Model):
     password = models.CharField(_('password'), max_length=128, blank=True)
 
 
-    def has_access(self, user):
-        """
-        Returns true, if the team is public, or the given user is the founder
-        or a member of the team.
-        """
-        return self.public or self.founder == user or self.members.contains(
-                                                                        user)
+    def is_member(self, user):
+        return self.members.filter(username=user.username)
 
-         
+
     def __unicode__(self):
         return self.name
-        
+
 
 class Dragable(models.Model):
     """
@@ -52,7 +47,7 @@ class Dragable(models.Model):
         verbose_name = _('dragable')
         verbose_name_plural = _('dragables')
         ordering = ['created']
-        
+
     hash = models.CharField(_('hash'), max_length=128, unique=True)
     created_by = models.ForeignKey(User, name=_('created by'))
     team = models.ForeignKey(Team, name=_('team'))
@@ -66,6 +61,15 @@ class Dragable(models.Model):
                                      name=_('connected to'),
                                      blank=True,
                                      null=True)
+
+
+    def can_modify(self, user):
+        """
+        Returns true, if the user created the dragable, or is a member of
+        the team the dragable belongs to.
+        """
+        return (self.created_by == user) or self.team.is_member(user)
+
 
     def __unicode__(self):
         return self.hash
@@ -81,10 +85,10 @@ class Annotation(models.Model):
         verbose_name_plural = _('annotations')
         ordering = ['created']
         abstract = True
-    
+
     hash = models.CharField(_('hash'), max_length=128, unique=True)
     dragable = models.ForeignKey(Dragable, name=_('dragable'))
-    creator = models.ForeignKey(User, name=_('creator'))
+    created_by = models.ForeignKey(User, name=_('created_by'))
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
 
@@ -99,7 +103,7 @@ class NoteAnnotation(Annotation):
     class Meta:
         verbose_name = _('note annotation')
         verbose_name_plural = _('note annotations')
-    
+
     text = models.TextField(_('text'))
 
 
@@ -110,7 +114,7 @@ class UrlAnnotation(Annotation):
     class Meta:
         verbose_name = _('URL annotation')
         verbose_name_plural = _('URL annotations')
-    
+
     url = models.URLField(_('URL'), verify_exists=False)
     description = models.TextField(_('description'), blank=True)
 
@@ -122,7 +126,7 @@ class ImageAnnotation(Annotation):
     class Meta:
         verbose_name = _('image annotation')
         verbose_name_plural = _('image annotations')
-    
+
     url = models.URLField(_('URL'), verify_exists=False)
     description = models.TextField(_('description'), blank=True)
 

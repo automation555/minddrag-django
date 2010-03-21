@@ -13,7 +13,7 @@ ACCPREF = settings.ACCOUNTS_URL_PREFIX[1:]
 
 urlpatterns = patterns('',
     url(r'^$', core.views.index, name='index'),
-    
+
     url(r'^%s' % settings.LOGIN_URL[1:], auth_views.login, name='auth_login'),
     url(r'^%s' % settings.LOGOUT_URL[1:], auth_views.logout, name='auth_logout'),
 
@@ -47,7 +47,7 @@ urlpatterns = patterns('',
         direct_to_template,
         { 'template': 'registration/activation_complete.html' },
         name='registration_activation_complete'),
-    
+
     url(r'^%s$' % (ACCPREF + 'activate/(?P<activation_key>\w+)/'),
         'registration.views.activate',
         { 'backend': 'registration.backends.default.DefaultBackend' },
@@ -57,22 +57,22 @@ urlpatterns = patterns('',
         'registration.views.register',
         { 'backend': 'registration.backends.default.DefaultBackend' },
         name='registration_register'),
-    
+
     url(r'^%s$' % (ACCPREF + 'register/complete/'),
         direct_to_template,
         { 'template': 'registration/registration_complete.html' },
         name='registration_complete'),
-    
+
 #    url(r'^accounts/register/closed/$',
 #        direct_to_template,
 #        { 'template': 'registration/registration_closed.html' },
 #        name='registration_disallowed'),
-    
+
     url(r'^members/$', 'core.views.my_dragables', name='core_my_dragables'),
 
     # API
-    (r'^api/', include('api.urls')),
-    
+    (r'^api/1.0/', include('api.urls')),
+
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
 )

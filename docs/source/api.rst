@@ -43,9 +43,11 @@ Retrieve Teams
 
 GET
 
-**Searching**
+**Parameters**
 
-Don't include ``name`` in the URL and use a parameter ``search`` instead.
+Don't include ``name`` in the URL when using these.
+
+- *search*: Search term (TODO)
 
 **Access Restrictions**
 
@@ -185,30 +187,22 @@ GET
 
 **Notice:** Don't include the ``hash`` in the URL when using these.
 
-- *start*: Offset to start at (default 0)
-- *limit*: Number of dragables returned (default 25, max 100)
+- *start*: Offset to start at (default 0) (TODO)
+- *limit*: Number of dragables returned (default all) (TODO)
 - *team*: Retrieve all dragables that belong to this team.
-
-**Searching**
-
-Instead of ``team``, add a parameter ``search``.
+- *search*: Search term by which to filter the retrieved dragables. (TODO)
 
 **Access Restrictions**
 
+Authentication is required.
+
 - When retrieving an individual dragable:
 
-	Authentication is only required if the dragable belongs to a private team.
-	The authenticated user must be a member of the team.
+	The authenticated user must be a member of the team the dragable belongs to.
 
-- When retrieving all dragables for a given team:
+- When retrieving all dragables:
 
-	Authentication is only required if the team is private. The authenticated
-	user must be a member of the team.
-
-- When retrieving all dragables matching a given search term:
-
-	Search results for authenticated requests include dragables from private
-	teams that the authenticated user is a member of.
+	All dragables from the authenticated users teams are returned.
 
 **Example**
 
