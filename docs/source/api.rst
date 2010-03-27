@@ -309,19 +309,26 @@ GET
 
 **Notice:** Don't include the ``hash`` in the URL when using these.
 
-- *start*: Offset to start at (default 0)
-- *limit*: Number of dragables returned (default 25, max 100)
+- *start*: Offset to start at (default 0) TODO
+- *limit*: Number of dragables returned (default 25, max 100) TODO
 - *dragable*: Retrieve all annotations that belong to this dragable.
 
 **Searching**
 
-Instead `dragable``, add a parameter ``search``.
+TODO Instead of the parameter ``dragable``, add a parameter ``search``.
 
 **Access Restrictions**
 
-Anonymous requests only include annotations of dragables that belong to public
-teams. Authenticated requests include data from private teams that the
-authenticated user is a member of (analogous to API calls for dragables).
+Authentication is required.
+
+- When retrieving an individual annotation:
+
+	The authenticated user must be a member of the team the annotated dragable
+	belongs to.
+
+- When retrieving all annotations:
+
+	All annotations from the authenticated users teams are returned.
 
 **Example**
 
@@ -347,7 +354,7 @@ POST
 - *type*: The type of the annotation, one of ``note``, ``url``, ``image``, ``video``, ``file``
 
 - additional parameters for note annotations:
-   * *text*: The content of the note annotation.
+   * *note*: The content of the note annotation.
 
 - additional parameters for URL annotations:
    * *url*: The content of the URL annotation.
@@ -360,10 +367,12 @@ POST
 - additional parameters for video annotations:
    * *url*: The URL of the video that should be used to annotate the dragable.
    * *description*: A textual description of the annotation. (optional)
-   * *type*: One of ``youtube``, ``vimeo``, ``viddler``, ``blip.tv``, etc. (optional)
 
 - additional parameters for file annotations:
    * FIXME file upload OMG BBQ!!1!
+
+- additional parameters for connection annotations:
+   * *connected_to*: The unique hash of the dragable to connect the annotated dragable to.
 
 **Access Restrictions**
 

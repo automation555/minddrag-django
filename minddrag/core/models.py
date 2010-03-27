@@ -78,92 +78,42 @@ class Dragable(models.Model):
 class Annotation(models.Model):
     """
     Information that a user added to a dragable.
-    This is an abstract base class for all types of annotations.
+    There are 6 types of annotations that use different fields of this model.
     """
+    TYPE_CHOICES = (
+        (u'note', _('Note')),
+        (u'url', _('URL')),
+        (u'image', _('Image')),
+        (u'video', _('Video')),
+        (u'file', _('File')),
+        (u'connection', _('Connection')),
+    )
+
     class Meta:
         verbose_name = _('annotation')
         verbose_name_plural = _('annotations')
         ordering = ['created']
-        abstract = True
 
+    # common fields
     hash = models.CharField(_('hash'), max_length=128, unique=True)
     dragable = models.ForeignKey(Dragable, name=_('dragable'))
     created_by = models.ForeignKey(User, name=_('created_by'))
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
+    type = models.CharField(_('type'), max_length=32, choices=TYPE_CHOICES)
+    # note annotation field
+    note = models.TextField(_('note'), blank=True)
+    # url/image/video annotation fields
+    url = models.URLField(_('URL'), verify_exists=False, blank=True)
+    description = models.TextField(_('description'), blank=True)
+    # file annotation field
+    filename = models.CharField(_('filename'), max_length=255, blank=True)
+    # connection annotation field
+    connected_dragable = models.ForeignKey(Dragable,
+                                           name=_('connected dragable'),
+                                           related_name='connected_dragable',
+                                           blank=True,
+                                           null=True)
 
     def __unicode__(self):
         return self.hash
-
-
-class NoteAnnotation(Annotation):
-    """
-    Annotate a dragable with some text written by the user.
-    """
-    class Meta:
-        verbose_name = _('note annotation')
-        verbose_name_plural = _('note annotations')
-
-    text = models.TextField(_('text'))
-
-
-class UrlAnnotation(Annotation):
-    """
-    Annotate a dragable with a link to a website.
-    """
-    class Meta:
-        verbose_name = _('URL annotation')
-        verbose_name_plural = _('URL annotations')
-
-    url = models.URLField(_('URL'), verify_exists=False)
-    description = models.TextField(_('description'), blank=True)
-
-
-class ImageAnnotation(Annotation):
-    """
-    Annotate a dragable with an image from the web.
-    """
-    class Meta:
-        verbose_name = _('image annotation')
-        verbose_name_plural = _('image annotations')
-
-    url = models.URLField(_('URL'), verify_exists=False)
-    description = models.TextField(_('description'), blank=True)
-
-
-class VideoAnnotation(Annotation):
-    """
-    Annotate a dragable with a video from the web.
-    """
-    class Meta:
-        verbose_name = _('video annotation')
-        verbose_name_plural = _('video annotations')
-
-    url = models.URLField(_('URL'), verify_exists=False)
-    description = models.TextField(_('description'), blank=True)
-    type = models.CharField(_('video type'), max_length=32, blank=True) # maybe youtube, vimeo, etc.
-
-
-class FileAnnotation(Annotation):
-    """
-    Annotate a dragable with a file uploaded by the user.
-    """
-    class Meta:
-        verbose_name = _('file annotation')
-        verbose_name_plural = _('file annotations')
-
-    filename = models.CharField(_('filename'), max_length=255)
-    description = models.TextField(_('description'), blank=True)
-
-
-class ConnectionAnnotation(Annotation):
-    """
-    Annotate a dragable with another dragable, i.e. connect dragables.
-    """
-    class Meta:
-        verbose_name = _('connection annotation')
-        verbose_name_plural = _('connection annotations')
-
-    connected_dragable = models.ForeignKey(Dragable,
-                                           name=_('connected dragable'),
-                                           related_name='connected_dragable')

@@ -11,6 +11,8 @@ import simplejson as json
 
 from core.models import Team
 from core.models import Dragable
+from core.models import Annotation
+
 from logilab.common.xmlrpcutils import BasicAuthSafeTransport
 
 
@@ -110,6 +112,8 @@ class TeamTest(TestCase):
         self.assertEqual(response.status_code, 200)
         teams = json.loads(response.content)
         self.assertEqual(len(teams), 3)
+        for team in teams:
+            self.assert_('password' not in team)
 
 
     def test_retrieve_all_teams_with_auth(self):
@@ -117,6 +121,8 @@ class TeamTest(TestCase):
         self.assertEqual(response.status_code, 200)
         teams = json.loads(response.content)
         self.assertEqual(len(teams), 3)
+        for team in teams:
+            self.assert_('password' not in team)
 
 
     def test_retrieve_single_public_team_without_auth(self):
@@ -129,6 +135,7 @@ class TeamTest(TestCase):
         team = teams[0]
         self.assertEqual(team['name'], 'public test team')
         self.assertEqual(team['created_by']['username'], 'existing_user')
+        self.assert_('password' not in team)
 
 
     def test_retrieve_single_public_team_with_auth(self):
@@ -139,6 +146,7 @@ class TeamTest(TestCase):
         team = teams[0]
         self.assertEqual(team['name'], 'public test team')
         self.assertEqual(team['created_by']['username'], 'existing_user')
+        self.assert_('password' not in team)
 
 
     def test_retrieve_single_private_team_without_auth(self):
@@ -151,6 +159,7 @@ class TeamTest(TestCase):
         self.assertEqual(team['name'], 'existing_user_LOLcats')
         self.assertEqual(team['created_by']['username'], 'existing_user')
         self.assertEqual(team['public'], False)
+        self.assert_('password' not in team)
 
 
     def test_retrieve_single_private_team_with_auth(self):
@@ -162,6 +171,7 @@ class TeamTest(TestCase):
         self.assertEqual(team['name'], 'existing_user_LOLcats')
         self.assertEqual(team['created_by']['username'], 'existing_user')
         self.assertEqual(team['public'], False)
+        self.assert_('password' not in team)
 
 
     def test_retrieve_nonexisting_team_without_auth(self):
@@ -178,13 +188,13 @@ class TeamTest(TestCase):
         self.assertEqual(json.loads(response.content), [])
 
 
-    def test_create_team_without_auth_fails(self):
+    def test_create_team_without_auth(self):
         team_name = 'failteam'
         client = Client()
         response = client.post('/api/1.0/teams/', {'name': team_name})
         self.assertEqual(response.status_code, 401)
         teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(teams), 0)
+        self.assertEqual(teams.count(), 0)
 
 
     def test_create_public_team(self):
@@ -192,7 +202,7 @@ class TeamTest(TestCase):
         response = self.auth_client.post('/api/1.0/teams/', {'name': team_name})
         self.assertEqual(response.status_code, 201)
         teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(teams), 1)
+        self.assertEqual(teams.count(), 1)
         team = teams[0]
         self.assertEqual(team.name, team_name)
         self.assertEqual(team.created_by.username, 'existing_user')
@@ -206,7 +216,7 @@ class TeamTest(TestCase):
                                           'password': 'secret'})
         self.assertEqual(response.status_code, 201)
         teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(teams), 1)
+        self.assertEqual(teams.count(), 1)
         team = teams[0]
         self.assertEqual(team.name, team_name)
         self.assertEqual(team.created_by.username, 'existing_user')
@@ -220,7 +230,7 @@ class TeamTest(TestCase):
                                           'password': ''})
         self.assertEqual(response.status_code, 201)
         teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(teams), 1)
+        self.assertEqual(teams.count(), 1)
         team = teams[0]
         self.assertEqual(team.name, team_name)
         self.assertEqual(team.created_by.username, 'existing_user')
@@ -234,24 +244,24 @@ class TeamTest(TestCase):
                                           'password': '   '})
         self.assertEqual(response.status_code, 201)
         teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(teams), 1)
+        self.assertEqual(teams.count(), 1)
         team = teams[0]
         self.assertEqual(team.name, team_name)
         self.assertEqual(team.created_by.username, 'existing_user')
         self.assert_(team.public)
 
 
-    def test_create_duplicate_team_fails(self):
+    def test_create_duplicate_team(self):
         response = self.auth_client.post('/api/1.0/teams/', {'name': 'LOLcats'})
         self.assertEqual(response.status_code, 409)
 
 
-    def test_create_team_without_name_fails(self):
+    def test_create_team_without_name(self):
         response = self.auth_client.post('/api/1.0/teams/', {'foo': 'bar'})
         self.assertEqual(response.status_code, 400)
 
 
-    def test_update_public_team_without_auth_fails(self):
+    def test_update_public_team_without_auth(self):
         client = Client()
         team_name = 'LOLcats'
         new_description = 'foobar'
@@ -262,7 +272,7 @@ class TeamTest(TestCase):
         self.assert_(team.description != new_description)
 
 
-    def test_update_private_team_without_auth_fails(self):
+    def test_update_private_team_without_auth(self):
         client = Client()
         team_name = 'existing_user_LOLcats'
         new_description = 'foobar'
@@ -273,7 +283,7 @@ class TeamTest(TestCase):
         self.assert_(team.description != new_description)
 
 
-    def test_update_public_team_not_owner_fails(self):
+    def test_update_public_team_not_owner(self):
         team_name = 'LOLcats'
         new_description = 'foobar'
         client = BasicAuthClient('ownsnoteam', 'donthackmeeither')
@@ -284,7 +294,7 @@ class TeamTest(TestCase):
         self.assert_(team.description != new_description)
 
 
-    def test_update_private_team_not_owner_fails(self):
+    def test_update_private_team_not_owner(self):
         team_name = 'existing_user_LOLcats'
         new_description = 'foobar'
         client = BasicAuthClient('ownsnoteam', 'donthackmeeither')
@@ -295,14 +305,14 @@ class TeamTest(TestCase):
         self.assert_(team.description != new_description)
 
 
-    def test_update_nonexisting_team_without_auth_fails(self):
+    def test_update_nonexisting_team_without_auth(self):
         client = Client()
         response = client.put('/api/1.0/teams/teamdoesnotexist/',
                               {'description': 'foobar'})
         self.assertEqual(response.status_code, 401)
 
 
-    def test_update_nonexisting_team_with_auth_fails(self):
+    def test_update_nonexisting_team_with_auth(self):
         client = BasicAuthClient('ownsnoteam', 'donthackmeeither')
         response = client.put('/api/1.0/teams/teamdoesnotexist/',
                               {'description': 'foobar'})
@@ -341,33 +351,33 @@ class TeamTest(TestCase):
         self.assertEqual(team.public, False)
 
 
-    def test_delete_nonexistent_team_without_auth_fails(self):
+    def test_delete_nonexistent_team_without_auth(self):
         client = Client()
         response = client.delete('/api/1.0/teams/teamdoesnotexist/')
         self.assertEqual(response.status_code, 401)
 
 
-    def test_delete_nonexistent_team_with_auth_fails(self):
+    def test_delete_nonexistent_team_with_auth(self):
         team_name = 'teamdoesnotexist'
         teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(teams), 0)
+        self.assertEqual(teams.count(), 0)
         response = self.auth_client.delete('/api/1.0/teams/%s/' % team_name)
         self.assertEqual(response.status_code, 400)
 
 
-    def test_delete_public_team_without_auth_fails(self):
+    def test_delete_public_team_without_auth(self):
         client = Client()
         response = client.delete('/api/1.0/teams/LOLcats/')
         self.assertEqual(response.status_code, 401)
 
 
-    def test_delete_public_team_not_owner_fails(self):
+    def test_delete_public_team_not_owner(self):
         client = BasicAuthClient('ownsnoteam', 'donthackmeeither')
         response = client.delete('/api/1.0/teams/LOLcats/')
         self.assertEqual(response.status_code, 401)
 
 
-    def test_delete_private_team_not_owner_fails(self):
+    def test_delete_private_team_not_owner(self):
         client = BasicAuthClient('ownsnoteam', 'donthackmeeither')
         response = client.delete('/api/1.0/teams/existing_user_LOLcats/')
         self.assertEqual(response.status_code, 401)
@@ -376,26 +386,27 @@ class TeamTest(TestCase):
     def test_delete_public_team(self):
         team_name = 'LOLcats'
         before_teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(before_teams), 1)
+        self.assertEqual(before_teams.count(), 1)
         response = self.auth_client.delete('/api/1.0/teams/%s/' % team_name)
         self.assertEqual(response.status_code, 204)
         after_teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(after_teams), 0)
+        self.assertEqual(after_teams.count(), 0)
 
 
     def test_delete_private_team(self):
         team_name = 'existing_user_LOLcats'
         before_teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(before_teams), 1)
+        self.assertEqual(before_teams.count(), 1)
         response = self.auth_client.delete('/api/1.0/teams/%s/' % team_name)
         self.assertEqual(response.status_code, 204)
         after_teams = Team.objects.filter(name=team_name)
-        self.assertEqual(len(after_teams), 0)
+        self.assertEqual(after_teams.count(), 0)
 
 
-class DragableTest(TestCase):
+class DragableAndAnnotationTest(TestCase):
     """
-    test for API methods that deal with dragables
+    test for API methods that deal with dragables and annotations
+    (too lazy for fixtures right now)
     """
 
     def setUp(self):
@@ -464,6 +475,30 @@ class DragableTest(TestCase):
         dragable3.xpath = 'fi/fa/fu'
         dragable3.save()
 
+        note_annotation1 = Annotation()
+        note_annotation1.type = 'note'
+        note_annotation1.hash = 'note_ann1'
+        note_annotation1.dragable  = dragable
+        note_annotation1.created_by = user
+        note_annotation1.text = 'this is the first note annotation. evar!!'
+        note_annotation1.save()
+
+        url_annotation1 = Annotation()
+        url_annotation1.type = 'url'
+        url_annotation1.hash = 'url_ann1'
+        url_annotation1.dragable = dragable
+        url_annotation1.created_by = user
+        url_annotation1.url = 'http://example.com'
+        url_annotation1.save()
+
+        url_annotation2 = Annotation()
+        url_annotation2.type = 'url'
+        url_annotation2.hash = 'url_ann2'
+        url_annotation2.dragable = dragable2
+        url_annotation2.created_by = user2
+        url_annotation2.url = 'http://google.com'
+        url_annotation2.save()
+
         self.client = BasicAuthClient('testuser', 'donthackmebro')
 
 
@@ -474,7 +509,7 @@ class DragableTest(TestCase):
         # make sure we only get the dragables we are authorized to access
         username = self.client.username
         teams = Team.objects.filter(members__username=username)
-        self.assertNotEqual(len(teams), 0)
+        self.assertNotEqual(teams.count(), 0)
         team_names = [t.name for t in teams]
 
         for dragable in dragables:
@@ -482,6 +517,9 @@ class DragableTest(TestCase):
             team = dragable['team']['name']
             self.assert_((created_by == username) or (team in team_names),
             'user %s is not a member of %s' % (username, team))
+            for field in ('hash', 'created_by', 'team', 'created', 'updated',
+                          'url', 'title', 'text', 'xpath'):
+                self.assert_(field in dragable, field)
 
 
     def test_retrieve_dragable_by_hash(self):
@@ -707,7 +745,7 @@ class DragableTest(TestCase):
     def test_update_dragable_connected_to(self):
         username = self.client.username
         dragables = Dragable.objects.filter(team__members__username=username)
-        self.assert_(len(dragables) > 1)
+        self.assert_(dragables.count() > 1)
         dragable = dragables[0]
         connected_to = dragables[1]
         self.assert_((not dragable.connected_to) or
@@ -753,11 +791,11 @@ class DragableTest(TestCase):
 
     def test_update_nonexistent_dragable(self):
         nosuchhash = '783459343'
-        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
         data = {'title': 'nevermind'}
         response = self.client.put('/api/1.0/dragables/%s/' % nosuchhash, data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
 
 
     def test_update_dragable_nonexistent_team(self):
@@ -765,7 +803,7 @@ class DragableTest(TestCase):
         dragable = Dragable.objects.filter(team__members__username=username)[0]
         hash = dragable.hash
         nosuchteam = 'this team does not exist'
-        self.assertEqual(len(Team.objects.filter(name=nosuchteam)), 0)
+        self.assertEqual(Team.objects.filter(name=nosuchteam).count(), 0)
         data = {'team': nosuchteam}
         response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
         self.assertEqual(response.status_code, 400)
@@ -777,7 +815,7 @@ class DragableTest(TestCase):
         username = self.client.username
         dragable = Dragable.objects.filter(team__members__username=username)[0]
         nosuchhash = '783459343'
-        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
         hash = dragable.hash
         data = {'connected_to': nosuchhash}
         response = self.client.put('/api/1.0/dragables/%s/' % hash, data)
@@ -793,7 +831,7 @@ class DragableTest(TestCase):
         hash = dragable.hash
         response = self.client.delete('/api/1.0/dragables/%s/' % hash)
         self.assertEqual(response.status_code, 204)
-        self.assertEqual(len(Dragable.objects.filter(hash=hash)), 0)
+        self.assertEqual(Dragable.objects.filter(hash=hash).count(), 0)
 
 
     def test_delete_inaccessible_dragable(self):
@@ -802,11 +840,189 @@ class DragableTest(TestCase):
         hash = dragable.hash
         response = self.client.delete('/api/1.0/dragables/%s/' % hash)
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(len(Dragable.objects.filter(hash=hash)), 1)
+        self.assertEqual(Dragable.objects.filter(hash=hash).count(), 1)
 
 
     def test_delete_nonexistent_dragable(self):
         nosuchhash = '783459343'
-        self.assertEqual(len(Dragable.objects.filter(hash=nosuchhash)), 0)
+        self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
         response = self.client.delete('/api/1.0/dragables/%s/' % nosuchhash)
         self.assertEqual(response.status_code, 400)
+
+
+    def test_retrieve_all_annotations(self):
+        response = self.client.get('/api/1.0/annotations/')
+        self.assertEqual(response.status_code, 200)
+        annotations = json.loads(response.content)
+
+        # make sure all the annotations we get are for dragables from teams
+        # that we are a member of
+        our_anns = Annotation.objects.filter(
+                        dragable__team__members__username=self.client.username)
+        our_anns_hashes = set([a.hash for a in our_anns])
+        for annotation in annotations:
+            self.assert_(annotation['hash'] in our_anns_hashes)
+
+
+    def test_retrieve_single_annotation(self):
+        response = self.client.get('/api/1.0/annotations/note_ann1/')
+        self.assertEqual(response.status_code, 200)
+        ann = json.loads(response.content)[0]
+        db_ann = Annotation.objects.get(hash='note_ann1')
+        self.assertEqual(db_ann.hash, ann['hash'])
+        self.assertEqual(db_ann.type, ann['type'])
+        self.assertEqual(db_ann.dragable.hash, ann['dragable']['hash'])
+        self.assertEqual(db_ann.created_by.username,
+                         ann['created_by']['username'])
+
+
+    def test_retrieve_inaccessible_annotation(self):
+        response = self.client.get('/api/1.0/annotations/url_ann2/')
+        self.assertEqual(response.status_code, 401)
+
+
+    def test_retrieve_nonexistent_annotation(self):
+        hash = 'nosuchhash'
+        # make sure this hash really doesn't exist
+        results = Annotation.objects.filter(hash=hash)
+        self.assertEqual(results.count(), 0)
+        response = self.client.get('/api/1.0/annotations/%s/' % hash)
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_retrieve_annotations_for_dragable(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = dragable.hash
+        anns_from_db = Annotation.objects.filter(dragable__hash=hash)
+        self.assertNotEqual(anns_from_db.count(), 0)
+        anns_hashes = set([a.hash for a in anns_from_db])
+        response = self.client.get('/api/1.0/annotations/', {'dragable': hash})
+        self.assertEqual(response.status_code, 200)
+        anns_from_api = json.loads(response.content)
+        for annotation in anns_from_api:
+            self.assert_(annotation['hash'] in anns_hashes)
+
+
+    def test_create_annotation_without_auth(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        data = {
+            'hash': 'new_note_ann',
+            'dragable': dragable.hash,
+            'type': 'note',
+            'note': 'hello, world!',
+        }
+        client = Client()
+        response = client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 401)
+
+
+    def test_create_note_annotation(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_note_ann'
+        data = {
+            'hash': hash,
+            'dragable': dragable.hash,
+            'type': 'note',
+            'note': 'hello, world!',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 201, response.content)
+        annotations = Annotation.objects.filter(hash=hash)
+        self.assertEqual(annotations.count(), 1)
+        dbann = annotations[0]
+        self.assertEqual(data['type'], dbann.type)
+        self.assertEqual(data['note'], dbann.note)
+
+
+    def test_create_url_annotation(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_url_ann'
+        data = {
+            'hash': hash,
+            'dragable': dragable.hash,
+            'type': 'url',
+            'url': 'http://example.com/',
+            'description': 'bla blub',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 201, response.content)
+        annotations = Annotation.objects.filter(hash=hash)
+        self.assertEqual(annotations.count(), 1)
+        dbann = annotations[0]
+        self.assertEqual(data['type'], dbann.type)
+        self.assertEqual(data['url'], dbann.url)
+        self.assertEqual(data['description'], dbann.description)
+
+
+    def test_create_image_annotation(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_image_ann'
+        data = {
+            'hash': hash,
+            'dragable': dragable.hash,
+            'type': 'image',
+            'url': 'http://example.com/some_pic.png',
+            'description': 'LOLcats galore',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 201, response.content)
+        annotations = Annotation.objects.filter(hash=hash)
+        self.assertEqual(annotations.count(), 1)
+        dbann = annotations[0]
+        self.assertEqual(data['type'], dbann.type)
+        self.assertEqual(data['url'], dbann.url)
+        self.assertEqual(data['description'], dbann.description)
+
+
+    def test_create_video_annotation(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_video_ann'
+        data = {
+            'hash': hash,
+            'dragable': dragable.hash,
+            'type': 'video',
+            'url': 'http://www.youtube.com/watch?v=W8e4Vgu4Uys',
+            'description': 'video LOLcats galore',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 201, response.content)
+        annotations = Annotation.objects.filter(hash=hash)
+        self.assertEqual(annotations.count(), 1)
+        dbann = annotations[0]
+        self.assertEqual(data['type'], dbann.type)
+        self.assertEqual(data['url'], dbann.url)
+        self.assertEqual(data['description'], dbann.description)
+
+
+# FIXME file upload OMGBBQ!!1!
+#    def test_create_file_annotation(self):
+#        pass
+
+
+    def test_create_connection_annotation(self):
+        username = self.client.username
+        dragables = Dragable.objects.filter(team__members__username=username)
+        dragable = dragables[0]
+        connected_to = dragables[1]
+        hash = 'new_connect_ann'
+        data = {
+            'hash': hash,
+            'dragable': dragable.hash,
+            'type': 'connection',
+            'connected_to': connected_to.hash,
+            'description': 'i\'ve got connections',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 201, response.content)
+        annotations = Annotation.objects.filter(hash=hash)
+        self.assertEqual(annotations.count(), 1)
+        dbann = annotations[0]
+        self.assertEqual(data['type'], dbann.type)
+        self.assertEqual(data['connected_to'], dbann.connected_dragable.hash)
+
