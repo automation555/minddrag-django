@@ -402,7 +402,7 @@ One or more of the following:
 - *dragable*: The unique hash of the dragable that is annotated.
 
 - parameters for note annotations:
-   * *text*: The content of the note annotation.
+   * *note*: The content of the note annotation.
 
 - parameters for URL annotations:
    * *url*: The content of the URL annotation.
@@ -415,10 +415,12 @@ One or more of the following:
 - parameters for video annotations:
    * *url*: The URL of the video that should be used to annotate the dragable.
    * *description*: A textual description of the annotation. (optional)
-   * *type*: One of ``youtube``, ``vimeo``, ``viddler``, ``blip.tv``, etc.
 
 - parameters for file annotations:
    * FIXME file upload OMG BBQ!!1!
+
+- parameters for connection annotations:
+   * *connected_to*: The unique hash of the dragable that this annotation creates a connection to.
 
 **Access Restrictions**
 

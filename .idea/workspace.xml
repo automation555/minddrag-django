@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="8cced8d3-31f4-42f2-b978-43b9601235dd" name="Default" comment="" />
-    <ignored path=".idea/workspace.xml" />
     <ignored path="minddrag-django.iws" />
+    <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,10 +26,10 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="handlers.py" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="handlers.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/minddrag/api/handlers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="341" column="56" selection-start="10056" selection-end="10056" vertical-scroll-proportion="0.6795476">
+                <state line="335" column="25" selection-start="9526" selection-end="9526" vertical-scroll-proportion="0.95193213">
                   <folding />
                 </state>
               </provider>
@@ -65,7 +65,7 @@
           <file leaf-file-name="api.rst" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/docs/source/api.rst">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="374" column="78" selection-start="6775" selection-end="6775" vertical-scroll-proportion="0.0">
+                <state line="422" column="0" selection-start="7836" selection-end="7836" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -75,11 +75,61 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="tests.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/minddrag/api/tests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1027" column="0" selection-start="41205" selection-end="41205" vertical-scroll-proportion="0.88784164">
-                  <folding />
+                <state line="1174" column="0" selection-start="46863" selection-end="46863" vertical-scroll-proportion="0.90386426">
+                  <folding>
+                    <marker date="1269806641000" expanded="true" signature="15552:46914" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="15698:18991" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="19041:19932" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="19989:20221" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="20291:20561" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="20679:21120" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="21253:21497" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="21589:22356" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="22480:22981" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="23113:23594" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="23669:24017" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="24148:24596" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="24729:25185" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="25237:25907" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="25958:26466" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="26519:27035" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="27088:27600" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="27652:28156" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="28219:29135" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="29195:30047" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="30107:30557" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="30622:31212" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="31271:31621" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="31685:32220" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="32292:32881" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="32928:33263" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="33323:33659" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="33718:33949" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="34005:34557" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="34615:35115" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="35179:35291" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="35354:35646" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="35711:36318" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="36380:36798" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="36852:37528" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="37595:37975" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="38042:38423" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="38494:38862" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="38915:39696" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="39751:40554" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="40609:41429" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="41580:42420" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="42474:43076" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="43129:43727" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="43780:44378" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="44439:44884" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="44946:45357" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="45418:45699" placeholder="..." />
+                    <marker date="1269806641000" expanded="true" signature="45748:46138" placeholder="..." />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -108,10 +158,10 @@
         <option value="$PROJECT_DIR$/minddrag/api/urls.py" />
         <option value="$PROJECT_DIR$/minddrag/core/admin.py" />
         <option value="$PROJECT_DIR$/minddrag/settings.py" />
-        <option value="$PROJECT_DIR$/docs/source/api.rst" />
         <option value="$PROJECT_DIR$/minddrag/core/models.py" />
-        <option value="$PROJECT_DIR$/minddrag/api/handlers.py" />
+        <option value="$PROJECT_DIR$/docs/source/api.rst" />
         <option value="$PROJECT_DIR$/minddrag/api/tests.py" />
+        <option value="$PROJECT_DIR$/minddrag/api/handlers.py" />
       </list>
     </option>
   </component>
@@ -431,56 +481,96 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/minddrag/api/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/minddrag/api/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="25" selection-start="325" selection-end="325" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/minddrag/core/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="167" selection-end="167" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/minddrag/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="5" selection-start="2972" selection-end="2972" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="97" column="5" selection-start="2972" selection-end="2972" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/api.rst">
+    <entry file="file://$PROJECT_DIR$/minddrag/core/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="374" column="78" selection-start="6775" selection-end="6775" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="6" column="0" selection-start="167" selection-end="167" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/minddrag/api/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="25" selection-start="325" selection-end="325" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/minddrag/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="0" selection-start="4273" selection-end="4273" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="116" column="0" selection-start="4273" selection-end="4273" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/minddrag/api/handlers.py">
+    <entry file="file://$PROJECT_DIR$/docs/source/api.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="341" column="56" selection-start="10056" selection-end="10056" vertical-scroll-proportion="0.6795476">
+        <state line="422" column="0" selection-start="7836" selection-end="7836" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/minddrag/api/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1027" column="0" selection-start="41205" selection-end="41205" vertical-scroll-proportion="0.88784164">
+        <state line="1174" column="0" selection-start="46863" selection-end="46863" vertical-scroll-proportion="0.90386426">
+          <folding>
+            <marker date="1269806641000" expanded="true" signature="15552:46914" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="15698:18991" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="19041:19932" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="19989:20221" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="20291:20561" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="20679:21120" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="21253:21497" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="21589:22356" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="22480:22981" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="23113:23594" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="23669:24017" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="24148:24596" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="24729:25185" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="25237:25907" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="25958:26466" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="26519:27035" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="27088:27600" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="27652:28156" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="28219:29135" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="29195:30047" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="30107:30557" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="30622:31212" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="31271:31621" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="31685:32220" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="32292:32881" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="32928:33263" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="33323:33659" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="33718:33949" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="34005:34557" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="34615:35115" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="35179:35291" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="35354:35646" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="35711:36318" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="36380:36798" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="36852:37528" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="37595:37975" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="38042:38423" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="38494:38862" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="38915:39696" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="39751:40554" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="40609:41429" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="41580:42420" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="42474:43076" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="43129:43727" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="43780:44378" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="44439:44884" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="44946:45357" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="45418:45699" placeholder="..." />
+            <marker date="1269806641000" expanded="true" signature="45748:46138" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/minddrag/api/handlers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="335" column="25" selection-start="9526" selection-end="9526" vertical-scroll-proportion="0.95193213">
           <folding />
         </state>
       </provider>

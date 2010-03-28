@@ -174,18 +174,16 @@ class TeamTest(TestCase):
         self.assert_('password' not in team)
 
 
-    def test_retrieve_nonexisting_team_without_auth(self):
+    def test_retrieve_nonexistent_team_without_auth(self):
         client = Client()
         response = client.get('/api/1.0/teams/this team does not exist/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), [])
+        self.assertEqual(response.status_code, 404)
 
 
-    def test_retrieve_nonexisting_team_with_auth(self):
+    def test_retrieve_nonexistent_team_with_auth(self):
         response = self.auth_client.get(
                                     '/api/1.0/teams/this team does not exist/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), [])
+        self.assertEqual(response.status_code, 404)
 
 
     def test_create_team_without_auth(self):
@@ -305,18 +303,18 @@ class TeamTest(TestCase):
         self.assert_(team.description != new_description)
 
 
-    def test_update_nonexisting_team_without_auth(self):
+    def test_update_nonexistent_team_without_auth(self):
         client = Client()
         response = client.put('/api/1.0/teams/teamdoesnotexist/',
                               {'description': 'foobar'})
         self.assertEqual(response.status_code, 401)
 
 
-    def test_update_nonexisting_team_with_auth(self):
+    def test_update_nonexistent_team_with_auth(self):
         client = BasicAuthClient('ownsnoteam', 'donthackmeeither')
         response = client.put('/api/1.0/teams/teamdoesnotexist/',
                               {'description': 'foobar'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
 
     def test_update_public_team(self):
@@ -362,7 +360,7 @@ class TeamTest(TestCase):
         teams = Team.objects.filter(name=team_name)
         self.assertEqual(teams.count(), 0)
         response = self.auth_client.delete('/api/1.0/teams/%s/' % team_name)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
 
     def test_delete_public_team_without_auth(self):
@@ -480,7 +478,7 @@ class DragableAndAnnotationTest(TestCase):
         note_annotation1.hash = 'note_ann1'
         note_annotation1.dragable  = dragable
         note_annotation1.created_by = user
-        note_annotation1.text = 'this is the first note annotation. evar!!'
+        note_annotation1.note = 'this is the first note annotation. evar!!'
         note_annotation1.save()
 
         url_annotation1 = Annotation()
@@ -794,7 +792,7 @@ class DragableAndAnnotationTest(TestCase):
         self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
         data = {'title': 'nevermind'}
         response = self.client.put('/api/1.0/dragables/%s/' % nosuchhash, data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
 
 
@@ -847,7 +845,7 @@ class DragableAndAnnotationTest(TestCase):
         nosuchhash = '783459343'
         self.assertEqual(Dragable.objects.filter(hash=nosuchhash).count(), 0)
         response = self.client.delete('/api/1.0/dragables/%s/' % nosuchhash)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
 
     def test_retrieve_all_annotations(self):
@@ -887,7 +885,7 @@ class DragableAndAnnotationTest(TestCase):
         results = Annotation.objects.filter(hash=hash)
         self.assertEqual(results.count(), 0)
         response = self.client.get('/api/1.0/annotations/%s/' % hash)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
 
     def test_retrieve_annotations_for_dragable(self):
@@ -935,6 +933,45 @@ class DragableAndAnnotationTest(TestCase):
         dbann = annotations[0]
         self.assertEqual(data['type'], dbann.type)
         self.assertEqual(data['note'], dbann.note)
+
+
+    def test_create_note_annotation_missing_note(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_note_ann'
+        data = {
+            'hash': hash,
+            'dragable': dragable.hash,
+            'type': 'note',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_create_note_annotation_missing_hash(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_note_ann'
+        data = {
+            'dragable': dragable.hash,
+            'type': 'note',
+            'note': 'foo',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_create_note_annotation_missing_dragable(self):
+        username = self.client.username
+        dragable = Dragable.objects.filter(team__members__username=username)[0]
+        hash = 'new_note_ann'
+        data = {
+            'hash': hash,
+            'type': 'note',
+            'note': 'foo',
+        }
+        response = self.client.post('/api/1.0/annotations/', data)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_create_url_annotation(self):
@@ -1026,3 +1063,113 @@ class DragableAndAnnotationTest(TestCase):
         self.assertEqual(data['type'], dbann.type)
         self.assertEqual(data['connected_to'], dbann.connected_dragable.hash)
 
+
+    def test_update_note_annotation(self):
+        username = self.client.username
+        before_ann = Annotation.objects.filter(type='note',
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        newnote = 'this is a new note'
+        self.assertNotEqual(newnote, before_ann.note)
+        data = {
+            'note': newnote,
+        }
+        response = self.client.put('/api/1.0/annotations/%s/' % hash, data)
+        self.assertEqual(response.status_code, 200, response.content)
+        after_ann = Annotation.objects.get(hash=hash)
+        self.assertEqual(after_ann.note, newnote)
+
+
+    def test_update_url_annotation(self):
+        username = self.client.username
+        before_ann = Annotation.objects.filter(type='url',
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        newurl = 'http://www.python.org/'
+        self.assertNotEqual(newurl, before_ann.url)
+        data = {
+            'url': newurl,
+        }
+        response = self.client.put('/api/1.0/annotations/%s/' % hash, data)
+        self.assertEqual(response.status_code, 200, response.content)
+        after_ann = Annotation.objects.get(hash=hash)
+        self.assertEqual(after_ann.url, newurl)
+
+
+    def test_update_url_annotation(self):
+        username = self.client.username
+        before_ann = Annotation.objects.filter(type='url',
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        newurl = 'http://www.python.org/'
+        self.assertNotEqual(newurl, before_ann.url)
+        data = {
+            'url': newurl,
+        }
+        response = self.client.put('/api/1.0/annotations/%s/' % hash, data)
+        self.assertEqual(response.status_code, 200, response.content)
+        after_ann = Annotation.objects.get(hash=hash)
+        self.assertEqual(after_ann.url, newurl)
+
+
+    def test_update_annotation_change_type(self):
+        username = self.client.username
+        before_ann = Annotation.objects.exclude(type='note').filter(
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        data = {
+            'type': 'note',
+            'note': 'arfgnarf',
+        }
+        response = self.client.put('/api/1.0/annotations/%s/' % hash, data)
+        self.assertEqual(response.status_code, 400, response.content)
+
+
+    def test_update_inaccessible_annotation(self):
+        username = self.client.username
+        before_ann = Annotation.objects.filter(type='url').exclude(
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        data = {
+            'url': 'http://www.python.org/',
+        }
+        response = self.client.put('/api/1.0/annotations/%s/' % hash, data)
+        self.assertEqual(response.status_code, 401)
+
+
+    def test_update_nonexistent_annotation(self):
+        hash = 'doesntexist'
+        self.assertEqual(Annotation.objects.filter(hash=hash).count(), 0)
+        data = {
+            'note': 'arfgnarf',
+        }
+        response = self.client.put('/api/1.0/annotations/%s/' % hash, data)
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_delete_annotation(self):
+        username = self.client.username
+        before_ann = Annotation.objects.filter(
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        response = self.client.delete('/api/1.0/annotations/%s/' % hash)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(Annotation.objects.filter(hash=hash).count(), 0)
+
+
+    def test_delete_inaccessible_annotation(self):
+        username = self.client.username
+        before_ann = Annotation.objects.exclude(
+                                  dragable__team__members__username=username)[0]
+        hash = before_ann.hash
+        response = self.client.delete('/api/1.0/annotations/%s/' % hash)
+        self.assertEqual(response.status_code, 401)
+        self.assertNotEqual(Annotation.objects.filter(hash=hash).count(), 0)
+
+
+    def test_delete_nonexistent_annotation(self):
+        username = self.client.username
+        hash = 'doesntexist'
+        self.assertEqual(Annotation.objects.filter(hash=hash).count(), 0)
+        response = self.client.delete('/api/1.0/annotations/%s/' % hash)
+        self.assertEqual(response.status_code, 404)

@@ -23,6 +23,16 @@ class AnonymousTeamHandler(AnonymousBaseHandler):
     )
     exclude = ('password',)
 
+    def read(self, request, name=None):
+        teams = Team.objects.all()
+
+        if name:
+            teams = teams.filter(name=name)
+            if not teams.count():
+                return rc.NOT_FOUND
+
+        return teams
+
 
 class TeamHandler(BaseHandler):
     allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
@@ -37,6 +47,17 @@ class TeamHandler(BaseHandler):
         ('members', ('username',)),
     )
     exclude = ('password',)
+
+    def read(self, request, name=None):
+        teams = Team.objects.all()
+
+        if name:
+            teams = teams.filter(name=name)
+            if not teams.count():
+                return rc.NOT_FOUND
+
+        return teams
+
 
     def create(self, request):
         if not 'name' in request.POST:
@@ -65,7 +86,7 @@ class TeamHandler(BaseHandler):
         try:
             team = Team.objects.get(name=name)
         except:
-            return rc.BAD_REQUEST
+            return rc.NOT_FOUND
 
         if team.created_by != request.user:
             return rc.FORBIDDEN
@@ -88,7 +109,7 @@ class TeamHandler(BaseHandler):
         try:
             team = Team.objects.get(name=name)
         except:
-            return rc.BAD_REQUEST
+            return rc.NOT_FOUND
 
         if team.created_by != request.user:
             return rc.FORBIDDEN
@@ -119,7 +140,7 @@ class DragableHandler(BaseHandler):
         if hash:
             dragables = Dragable.objects.filter(hash=hash)
             if not dragables.count():
-                return rc.BAD_REQUEST
+                return rc.NOT_FOUND
             else:
                 dragables = dragables.filter(team__members__username=username)
                 if not dragables.count():
@@ -171,7 +192,7 @@ class DragableHandler(BaseHandler):
         try:
             dragable = Dragable.objects.get(hash=hash)
         except:
-            return rc.BAD_REQUEST
+            return rc.NOT_FOUND
 
         if not dragable.can_modify(request.user):
             return rc.FORBIDDEN
@@ -205,7 +226,7 @@ class DragableHandler(BaseHandler):
         try:
             dragable = Dragable.objects.get(hash=hash)
         except:
-            return rc.BAD_REQUEST
+            return rc.NOT_FOUND
 
         if not dragable.can_modify(request.user):
             return rc.FORBIDDEN
@@ -215,7 +236,7 @@ class DragableHandler(BaseHandler):
 
 
 class AnnotationHandler(BaseHandler):
-    allowed_methods = ('GET', 'POST',)# 'PUT', 'DELETE')
+    allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
     model = Annotation
     fields = (
         'hash',
@@ -237,21 +258,23 @@ class AnnotationHandler(BaseHandler):
 
         if hash:
             annotations = Annotation.objects.filter(hash=hash)
+
             if not annotations.count():
-                return rc.BAD_REQUEST
-            else:
-                annotations = annotations.filter(
-                                dragable__team__members__username=username)
-                if not annotations.count():
-                    return rc.FORBIDDEN
+                return rc.NOT_FOUND
+
+            if not annotations[0].dragable.team.is_member(request.user):
+                return rc.FORBIDDEN
         else:
             annotations = Annotation.objects.filter(
                             dragable__team__members__username=username)
+
             if 'dragable' in request.GET:
                 dragable_hash = request.GET['dragable']
-                annotations = annotations.filter(dragable__hash=dragable_hash)
-                if not annotations.count():
+
+                if not Dragable.objects.filter(hash=dragable_hash).count():
                     return rc.BAD_REQUEST
+
+                annotations = annotations.filter(dragable__hash=dragable_hash)
 
         return annotations
 
@@ -277,6 +300,40 @@ class AnnotationHandler(BaseHandler):
             return self._create_connection_annotation(request)
         else:
             return rc.BAD_REQUEST
+
+
+    def update(self, request, hash):
+        try:
+            annotation = Annotation.objects.get(hash=hash)
+        except:
+            return rc.NOT_FOUND
+
+        if not annotation.dragable.team.is_member(request.user):
+            return rc.FORBIDDEN
+
+        fields = {
+            'note': (('note',), []),
+            'url': (('url',), ('description',)),
+            'image': (('url',), ('description',)),
+            'video': (('url',), ('description',)),
+            'file': (('filename',), []),
+            'connection':  (('connected_to',), []),
+        }[annotation.type]
+
+        return self._update_annotation(annotation, request, *fields)
+
+
+    def delete(self, request, hash):
+        try:
+            annotation = Annotation.objects.get(hash=hash)
+        except:
+            return rc.NOT_FOUND
+
+        if not annotation.dragable.team.is_member(request.user):
+            return rc.FORBIDDEN
+
+        annotation.delete()
+        return rc.DELETED
 
 
     def _create_note_annotation(self, request):
@@ -358,3 +415,38 @@ class AnnotationHandler(BaseHandler):
             setattr(annotation, field, qdict[field])
 
         return annotation
+
+
+    def _update_annotation(self,
+                           annotation,
+                           request,
+                           required_fields,
+                           optional_fields):
+        qdict = request.PUT
+
+        for field in required_fields:
+            if field not in qdict:
+                return rc.BAD_REQUEST
+            setattr(annotation, field, qdict[field])
+
+        for field in optional_fields:
+            if field in qdict:
+                setattr(annotation, field, qdict[field])
+
+        if 'dragable' in qdict:
+            try:
+                dragable = Dragable.objects.get(hash=qdict['dragable'])
+            except:
+                return rc.BAD_REQUEST
+
+            if not dragable.team.is_member(request.user):
+                return rc.FORBIDDEN
+
+            annotation.dragable = dragable
+
+        try:
+            annotation.save()
+        except:
+            return rc.BAD_REQUEST
+        return rc.ALL_OK
+
