@@ -35,6 +35,11 @@ class Team(models.Model):
         return self.members.filter(username=user.username)
 
 
+    def save(self, *args, **kwargs):
+        super(Team, self).save(*args, **kwargs)
+        self.members.add(self.created_by)
+
+
     def __unicode__(self):
         return self.name
 

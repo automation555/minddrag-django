@@ -85,8 +85,7 @@ class TeamTest(TestCase):
                            created_by=user,
                            public=True)
         public_team.save()
-        public_team.members = [ownsnoteam]
-        public_team.save()
+        public_team.members.add(ownsnoteam)
 
         public_lolcats = Team(name='LOLcats',
                               description='internet memes FTW!',
@@ -100,8 +99,7 @@ class TeamTest(TestCase):
                                public=False,
                                password='cheezeburger')
         private_lolcats.save()
-        private_lolcats.members = [ownsnoteam]
-        private_lolcats.save()
+        private_lolcats.members.add(ownsnoteam)
 
         self.auth_client = BasicAuthClient('existing_user', 'donthackmebro')
 
@@ -163,13 +161,17 @@ class TeamTest(TestCase):
 
 
     def test_retrieve_single_private_team_with_auth(self):
-        response = self.auth_client.get('/api/1.0/teams/existing_user_LOLcats/')
+        username = self.auth_client.username
+        team_name = 'existing_user_LOLcats'
+        response = self.auth_client.get('/api/1.0/teams/%s/' % team_name)
         self.assertEqual(response.status_code, 200)
         teams = json.loads(response.content)
         self.assertEqual(len(teams), 1)
         team = teams[0]
-        self.assertEqual(team['name'], 'existing_user_LOLcats')
-        self.assertEqual(team['created_by']['username'], 'existing_user')
+        self.assertEqual(team['name'], team_name)
+        self.assertEqual(team['created_by']['username'], username)
+        members = set([m['username'] for m in team['members']])
+        self.assert_(username in members, members)
         self.assertEqual(team['public'], False)
         self.assert_('password' not in team)
 
@@ -423,15 +425,11 @@ class DragableAndAnnotationTest(TestCase):
                            created_by=user,
                            public=True)
         public_team.save()
-        public_team.members = [user]
-        public_team.save()
 
         public_team2 = Team(name='public test team 2',
                             description='test me, too',
                             created_by=user2,
                             public=True)
-        public_team2.save()
-        public_team2.members = [user2]
         public_team2.save()
 
         public_team3 = Team(name='public test team 3',
@@ -440,8 +438,7 @@ class DragableAndAnnotationTest(TestCase):
                             public=False,
                             password='dukummsthiernetrein')
         public_team3.save()
-        public_team3.members = [user, user2]
-        public_team3.save()
+        public_team3.members.add(user)
 
         dragable = Dragable()
         dragable.hash = '23425'
