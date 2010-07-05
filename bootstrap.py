@@ -1129,36 +1129,36 @@ def create_bootstrap_script(extra_text, python_version=''):
 import os, subprocess
 def after_install(options, home_dir):
     subprocess.call([join(home_dir, 'bin', 'pip'),
-                     'install', '-q', '-r', 'requirements.txt'])
+                     'install', '-r', 'requirements.txt'])
 
     if options.development:
         logger.notify('Setting up development environment')
         subprocess.call([join(home_dir, 'bin', 'pip'),
-                         'install', '-q', '-r', 'dev-requirements.txt'])
-        subprocess.call([join(home_dir, 'bin', 'pip'),
-                         'install', '-q', '-r', 'ci-requirements.txt'])
+                         'install', '-r', 'dev-requirements.txt'])
+#        subprocess.call([join(home_dir, 'bin', 'pip'),
+#                         'install', '-r', 'ci-requirements.txt'])
 
-    if options.continuous_integration and not options.development:
-        logger.notify('Setting up continuous integration environment')
-        subprocess.call([join(home_dir, 'bin', 'pip'),
-                         'install', '-q', '-r', 'ci-requirements.txt'])
+#    if options.continuous_integration and not options.development:
+#        logger.notify('Setting up continuous integration environment')
+#        subprocess.call([join(home_dir, 'bin', 'pip'),
+#                         'install', '-r', 'ci-requirements.txt'])
 
     # install stuff only needed on production servers
-    if not (options.continuous_integration
-            or options.development
+#    if not (options.continuous_integration
+    if not (options.development
             or options.deploy):
         logger.notify('Setting up production server environment')
         subprocess.call([join(home_dir, 'bin', 'pip'),
-                         'install', '-q', '-r', 'prod-requirements.txt'])
+                         'install', '-r', 'prod-requirements.txt'])
 
 
 def extend_parser(parser):
     parser.add_option('-d', '--development',
         action="store_true", dest="development",
         help="Setup development environment")
-    parser.add_option('--ci',
-        action="store_true", dest="continuous_integration",
-        help="Setup continuous integration environment")
+#    parser.add_option('--ci',
+#        action="store_true", dest="continuous_integration",
+#        help="Setup continuous integration environment")
     parser.add_option('--deploy',
         action="store_true", dest="deploy",
         help="Prepare for deployment (only install stuff from requirements.txt)")

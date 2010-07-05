@@ -17,7 +17,7 @@ env.superusermail = 'hs@zeropatience.net'
 
 def prepare_deploy():
     with cd(env.projectname):
-        local('python manage.py test core')
+        local('python manage.py test core api')
 
 
 def virtualenv(command):
